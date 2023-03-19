@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { Provider } from "react-redux";
+import "./App.css";
+import Modal from "./components/shared/modal";
+import CreateUser from "./components/users/create.user";
+import UserItem from "./components/users/user.component";
+import { store } from "./redux/store";
+import { useGetAllUsersQuery } from "./redux/userAPI";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [openModal, setOpenModal] = useState(false);
+
+  const {
+    isLoading,
+    isFetching,
+    isError,
+    isSuccess,
+    error,
+    data: users,
+  } = useGetAllUsersQuery(
+    { page: 1, limit: 10 },
+    { refetchOnFocus: true, refetchOnReconnect: true }
+  );
+
+  const loading = isLoading || isFetching;
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <>
+      <Provider store={store}>
+        <div className="2xl:max-w-[90rem] max-w-[68rem] mx-auto">
+          <div className="m-8 grid grid-cols-[repeat(auto-fill,_320px)] gap-7 grid-rows-[1fr]">
+            <div
+              onClick={() => setOpenModal(true)}
+              className="flex items-center justify-center h-20 w-20 border-2 border-dashed border-blue-600 rounded-full text-blue-600 text-5xl cursor-pointer"
+            >
+              <i className="bx bx-plus"></i>
+            </div>
+
+            <h4 onClick={() => setOpenModal(true)} className="">
+              Adicionar novo usuário
+            </h4>
+          </div>
+
+          {users?.map((user) => (
+            <UserItem key={user.id} user={user} />
+          ))}
+
+          <Modal openModal={openModal} setOpenModal={setOpenModal}>
+            <CreateUser setOpenModal={setOpenModal} />
+          </Modal>
+        </div>
+      </Provider>
+    </>
+  );
 }
 
-export default App
+export default App;
