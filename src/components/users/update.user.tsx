@@ -143,3 +143,5 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
     </section>
   );
 };
+
+export default UpdateUser;

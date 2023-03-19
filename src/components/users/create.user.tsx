@@ -135,3 +135,5 @@ const CreateUser: FC<ICreateUserProps> = ({ setOpenModal }) => {
     </section>
   );
 };
+
+export default CreateUser;
