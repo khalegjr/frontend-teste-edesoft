@@ -1,5 +1,7 @@
 import NProgress from "nprogress";
 import { FC, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { twMerge } from "tailwind-merge";
 import { IUser } from "../../redux/types";
 import { useDeleteUserMutation } from "../../redux/userAPI";
 import Modal from "../shared/modal";
@@ -19,11 +21,18 @@ const UserItem: FC<UserItemProps> = ({ user }) => {
   useEffect(() => {
     if (isSuccess) {
       setOpenModal(false);
+      toast.warning("Usuário deletado com sucesso");
       NProgress.done();
     }
 
     if (isError) {
       setOpenModal(false);
+      const err = error as any;
+      const resMessage =
+        err.data.message || err.data.detail || err.message || err.toString();
+      toast.error(resMessage, {
+        position: "top-right",
+      });
       NProgress.done();
     }
   }, [isLoading]);
@@ -41,25 +50,27 @@ const UserItem: FC<UserItemProps> = ({ user }) => {
           <h4 className="mb-2 pb-2 text-2xl font-semibold tracking-tight text-gray-900">
             {user.name.firstname} {user.name.lastname}
           </h4>
-          <p className="mb-3 font-normal text-ct-dark-200">
+          <p className="mb-3 font-normal text-dark-200">
             <span className="font-semibold">Username:</span> {user.username}
           </p>
 
-          <p className="mb-3 font-normal text-ct-dark-200">
-            <span className="font-semibold">Username:</span> {user.email}
+          <p className="mb-3 font-normal text-dark-200">
+            <span className="font-semibold">Email:</span> {user.email}
           </p>
         </div>
         <div className="relative border-t border-slate-300 flex justify-between items-center">
           <div
             onClick={() => setOpenSettings(!openSettings)}
-            className="text-ct-dark-100 text-lg cursor-pointer"
+            className="text-dark-100 text-lg cursor-pointer"
           >
             <i className="bx bx-dots-horizontal-rounded"></i>
           </div>
           <div
             id="settings-dropdown"
-            className={`absolute right-0 bottom-3 z-10 w-28 text-base list-none bg-white rounded divide-y divide-gray-100 shadow
-              ${openSettings}`}
+            className={twMerge(
+              `absolute right-0 bottom-3 z-10 w-28 text-base list-none bg-white rounded divide-y divide-gray-100 shadow`,
+              `${openSettings ? "block" : "hidden"}`
+            )}
           >
             <ul className="py-1" aria-labelledby="dropdownButton">
               <li

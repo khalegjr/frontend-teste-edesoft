@@ -2,6 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import NProgress from "nprogress";
 import { FC, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { twMerge } from "tailwind-merge";
 import { object, string, TypeOf } from "zod";
 import { IUser } from "../../redux/types";
 import { useUpdateUserMutation } from "../../redux/userAPI";
@@ -51,11 +53,18 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
   useEffect(() => {
     if (isSuccess) {
       setOpenModal(false);
+      toast.success("Usuário atualizado com sucesso");
       NProgress.done();
     }
 
     if (isError) {
       setOpenModal(false);
+      const err = error as any;
+      const resMessage =
+        err.data.message || err.data.detail || err.message || err.toString();
+      toast.error(resMessage, {
+        position: "top-right",
+      });
       NProgress.done();
     }
   }, [isLoading]);
@@ -75,7 +84,7 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
         >
           <i className="bx bx-x"></i>
         </div>
-      </div>
+      </div>{" "}
       <form className="w-full" onSubmit={handleSubmit(onSubmitHandler)}>
         <div className="mb-2">
           <label
@@ -85,9 +94,20 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
             Primeiro Nome
           </label>
           <input
-            className="border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none"
+            className={twMerge(
+              `appearance-none border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none`,
+              `${errors.name?.firstname && "border-red-500"}`
+            )}
             {...methods.register("name.firstname")}
           />
+          <p
+            className={twMerge(
+              `text-red-500 text-xs italic mb-2 invisible`,
+              `${errors.name?.firstname && "visible"}`
+            )}
+          >
+            {errors.name?.firstname?.message as string}
+          </p>
         </div>
 
         <div className="mb-2">
@@ -98,9 +118,20 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
             Último Nome
           </label>
           <input
-            className="border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none"
+            className={twMerge(
+              `appearance-none border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none`,
+              `${errors.name?.lastname && "border-red-500"}`
+            )}
             {...methods.register("name.lastname")}
           />
+          <p
+            className={twMerge(
+              `text-red-500 text-xs italic mb-2 invisible`,
+              `${errors.name?.lastname && "visible"}`
+            )}
+          >
+            {errors.name?.lastname?.message as string}
+          </p>
         </div>
 
         <div className="mb-2">
@@ -111,9 +142,20 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
             Username
           </label>
           <input
-            className="border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none"
+            className={twMerge(
+              `appearance-none border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none`,
+              `${errors["username"] && "border-red-500"}`
+            )}
             {...methods.register("username")}
           />
+          <p
+            className={twMerge(
+              `text-red-500 text-xs italic mb-2 invisible`,
+              `${errors["username"] && "visible"}`
+            )}
+          >
+            {errors["username"]?.message as string}
+          </p>
         </div>
 
         <div className="mb-2">
@@ -122,9 +164,20 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
           </label>
           <input
             type="email"
-            className="border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none"
+            className={twMerge(
+              `appearance-none border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none`,
+              `${errors["email"] && "border-red-500"}`
+            )}
             {...methods.register("email")}
           />
+          <p
+            className={twMerge(
+              `text-red-500 text-xs italic mb-2 invisible`,
+              `${errors["email"] && "visible"}`
+            )}
+          >
+            {errors["email"]?.message as string}
+          </p>
         </div>
 
         <div className="mb-2">
@@ -136,9 +189,20 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
           </label>
           <input
             type="password"
-            className="border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none"
+            className={twMerge(
+              `appearance-none border border-gray-400 rounded w-full py-3 px-3 text-gray-700 mb-2 leading-tight focus:outline-none`,
+              `${errors["password"] && "border-red-500"}`
+            )}
             {...methods.register("password")}
           />
+          <p
+            className={twMerge(
+              `text-red-500 text-xs italic mb-2 invisible`,
+              `${errors["password"] && "visible"}`
+            )}
+          >
+            {errors["password"]?.message as string}
+          </p>
         </div>
 
         <LoadingButton loading={false}>Atualizar Usuário</LoadingButton>

@@ -1,6 +1,8 @@
 import NProgress from "nprogress";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Modal from "./components/shared/modal";
 import CreateUser from "./components/users/create.user";
@@ -32,6 +34,12 @@ function AppContent() {
 
     if (isError) {
       setOpenModal(false);
+      const err = error as any;
+      const resMessage =
+        err.data.message || err.data.detail || err.message || err.toString();
+      toast.error(resMessage, {
+        position: "top-right",
+      });
       NProgress.done();
     }
   }, [loading]);
@@ -67,6 +75,7 @@ function App() {
     <>
       <Provider store={store}>
         <AppContent />
+        <ToastContainer />
       </Provider>
     </>
   );
