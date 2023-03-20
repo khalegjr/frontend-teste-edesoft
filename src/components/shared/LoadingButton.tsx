@@ -1,4 +1,5 @@
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 type LoadingButtonProps = {
   loading: boolean;
@@ -16,12 +17,17 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   return (
     <button
       type="submit"
-      className={`w-full py-3 font-semibold ${btnColor} rounded-lg outline-none border-none flex justify-center`}
+      className={twMerge(
+        `w-full py-3 font-semibold ${btnColor} rounded-lg outline-none border-none flex justify-center`,
+        `${loading && "bg-[#ccc]"}`
+      )}
     >
       {loading ? (
-        <div className="text-white inline-block">Loading...</div>
+        <div className="flex items-center gap-3">
+          <span className="text-white inline-block">Loading...</span>
+        </div>
       ) : (
-        <span className={`text-lg font-normal ${textColor}"`}>{children}</span>
+        <span className={`text-lg font-normal ${textColor}`}>{children}</span>
       )}
     </button>
   );

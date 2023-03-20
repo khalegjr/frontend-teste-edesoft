@@ -1,3 +1,4 @@
+import NProgress from "nprogress";
 import { FC, useEffect, useState } from "react";
 import { IUser } from "../../redux/types";
 import { useDeleteUserMutation } from "../../redux/userAPI";
@@ -18,10 +19,12 @@ const UserItem: FC<UserItemProps> = ({ user }) => {
   useEffect(() => {
     if (isSuccess) {
       setOpenModal(false);
+      NProgress.done();
     }
 
     if (isError) {
       setOpenModal(false);
+      NProgress.done();
     }
   }, [isLoading]);
 

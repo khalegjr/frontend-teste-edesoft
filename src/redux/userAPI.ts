@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import NProgress from "nprogress";
 import { IMutateUser, IUser, IUserResponse } from "./types";
 
 const BASEURL = "https://fakestoreapi.com/users";
@@ -19,6 +20,9 @@ export const userAPI = createApi({
       },
       invalidatesTags: [{ type: "Users", id: "LIST" }],
       transformResponse: (result: { user: IUserResponse }) => result.user,
+      onQueryStarted(arg, api) {
+        NProgress.start();
+      },
     }),
     updateUser: builder.mutation<
       IUserResponse,
@@ -40,6 +44,9 @@ export const userAPI = createApi({
             ]
           : [{ type: "Users", id: "LIST" }],
       transformResponse: (response: { user: IUserResponse }) => response.user,
+      onQueryStarted(arg, api) {
+        NProgress.start();
+      },
     }),
     getUser: builder.query<IUserResponse, string>({
       query(id) {
@@ -68,6 +75,9 @@ export const userAPI = createApi({
             ]
           : [{ type: "Users", id: "LIST" }],
       transformResponse: (results: { users: IUser[] }) => results.users,
+      onQueryStarted(arg, api) {
+        NProgress.start();
+      },
       keepUnusedDataFor: 5,
     }),
     deleteUser: builder.mutation<IUserResponse, string>({
@@ -79,6 +89,9 @@ export const userAPI = createApi({
         };
       },
       invalidatesTags: [{ type: "Users", id: "LIST" }],
+      onQueryStarted(arg, api) {
+        NProgress.start();
+      },
     }),
   }),
 });

@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import NProgress from "nprogress";
 import { FC, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { object, string, TypeOf } from "zod";
@@ -50,10 +51,12 @@ const UpdateUser: FC<IUpdateUserProps> = ({ user, setOpenModal }) => {
   useEffect(() => {
     if (isSuccess) {
       setOpenModal(false);
+      NProgress.done();
     }
 
     if (isError) {
       setOpenModal(false);
+      NProgress.done();
     }
   }, [isLoading]);
 
