@@ -57,10 +57,10 @@ export const userAPI = createApi({
       },
       providesTags: (result, error, id) => [{ type: "Users", id }],
     }),
-    getAllUsers: builder.query<IUser[], { page: number; limit: number }>({
-      query({ page, limit }) {
+    getAllUsers: builder.query<IUser[], { limit: number }>({
+      query({ limit }) {
         return {
-          url: `/?page=${page}&limit=${limit}`,
+          url: `?limit=${limit}`,
           credentials: "include",
         };
       },

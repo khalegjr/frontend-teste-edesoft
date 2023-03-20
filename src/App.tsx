@@ -21,7 +21,7 @@ function AppContent() {
     error,
     data: users,
   } = useGetAllUsersQuery(
-    { page: 1, limit: 10 },
+    { limit: 10 },
     { refetchOnFocus: true, refetchOnReconnect: true }
   );
 
